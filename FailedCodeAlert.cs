@@ -26,8 +26,8 @@ namespace Oxide.Plugins
 
         public class StoredData
         {
-            [JsonProperty("Notifications Enabled")]
-            public Dictionary<ulong, bool> NotificationsEnabled { get; set; } = new Dictionary<ulong, bool>();
+            [JsonProperty("Intrusion Alerts")]
+            public Dictionary<ulong, bool> IntrusionAlerts { get; set; } = new Dictionary<ulong, bool>();
         }
 
         #endregion Stored Data
@@ -58,7 +58,7 @@ namespace Oxide.Plugins
                 return;
 
             ulong ownerId = codeLock.OwnerID;
-            if (!_storedData.NotificationsEnabled.TryGetValue(ownerId, out bool enabled))
+            if (!_storedData.IntrusionAlerts.TryGetValue(ownerId, out bool enabled))
                 enabled = true;
 
             if (!enabled)
@@ -226,12 +226,12 @@ namespace Oxide.Plugins
             ulong userId = player.userID;
             bool currentState;
 
-            if (_storedData.NotificationsEnabled.TryGetValue(userId, out bool state))
+            if (_storedData.IntrusionAlerts.TryGetValue(userId, out bool state))
                 currentState = state;
             else
                 currentState = true;
 
-            _storedData.NotificationsEnabled[userId] = !currentState;
+            _storedData.IntrusionAlerts[userId] = !currentState;
             DataFileUtil.Save(DataFileUtil.GetFilePath(), _storedData);
 
             string messageKey;
